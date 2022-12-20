@@ -95,3 +95,53 @@ func Validate(c *gin.Context) {
 		"message": user,
 	})
 }
+
+func GetWishlist(c *gin.Context) {
+
+}
+
+func AddToWishlist(c *gin.Context) {
+	DB := initializers.DB
+
+	var body struct {
+		CustomerID  uint
+		productID   uint
+		Name        string
+		Description string
+		Available   bool
+		Price       int
+	}
+	//bind the body with the context
+	if c.Bind(&body) != nil {
+		helper.ShowError(c, "failed to read the body")
+		return
+	}
+	// get the current wishlist of a customer
+	var user models.User
+	profile := DB.First(&user, body.CustomerID)
+
+	if profile.Error != nil {
+		helper.ShowError(c, "failed to create user")
+		return
+	}
+
+	//check product already exists or not
+
+	// DB.Model(&user).
+	// 	Where("id = ?", body.productID).Association("Wishlist")
+
+	// DB.Model(&user).Association("Wishlist").Append(map[string]interface{}{
+	// 	"wishlist_product_id": body.productID,
+	// 	"name":                body.Name,
+	// 	"description":         body.Description,
+	// 	"available":           body.Available,
+	// 	"price":               body.Price})
+	DB.Model(&user).Association("Wishlist").Append(&models.WishlistOfUser{
+		WishlistProductID: body.productID,
+		Name:              body.Name,
+		Description:       body.Description,
+		Available:         body.Available,
+		Price:             body.Price})
+
+	c.JSON(http.StatusOK, user)
+}

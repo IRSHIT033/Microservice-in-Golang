@@ -11,34 +11,38 @@ type User struct {
 	Email     string `gorm:"unique"`
 	Name      string
 	Password  string
-	Addresses []Address
-	Cart      []Product
-	Wishlist  []WishlistOfUser
-	Orders    []Order
+	Addresses []Address        `gorm:"foreignKey:Belongsto"`
+	Cart      []Product        `gorm:"foreignKey:ProductID"`
+	Wishlist  []WishlistOfUser `gorm:"foreignKey:WishlistProductID"`
+	Orders    []Order          `gorm:"foreignKey:OrderID"`
 }
 type Address struct {
+	Belongsto  uint
 	Street     string
 	PostalCode string
 	Country    string
 }
 
 type Product struct {
-	ID    string
-	Name  string
-	Price string
-	unit  int
+	gorm.Model
+	ProductID uint
+	Name      string
+	Price     string
+	unit      int
 }
 
 type WishlistOfUser struct {
-	ID          string
-	Name        string
-	Description string
-	Available   bool
-	price       int
+	gorm.Model
+	WishlistProductID uint
+	Name              string
+	Description       string
+	Available         bool
+	Price             int
 }
 
 type Order struct {
-	ID     string
-	Amount string
-	Date   time.Time
+	gorm.Model
+	OrderID uint
+	Amount  string
+	Date    time.Time
 }
