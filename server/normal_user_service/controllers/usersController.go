@@ -97,6 +97,25 @@ func Validate(c *gin.Context) {
 }
 
 func GetWishlist(c *gin.Context) {
+	DB := initializers.DB
+
+	var body struct {
+		UserID uint
+	}
+	//bind the body with the context
+	if c.Bind(&body) != nil {
+		helper.ShowError(c, "failed to read the body")
+		return
+	}
+	//Find the wishlist related to userID
+	var user models.User
+	profile := DB.First(&user, body.UserID)
+	if profile.Error != nil {
+		helper.ShowError(c, "Customer not found")
+		return
+	}
+	DB.Model(&user).Association("Wishlist").Find(&user.Wishlist)
+	c.JSON(http.StatusOK, user.Wishlist)
 
 }
 
@@ -105,7 +124,7 @@ func AddToWishlist(c *gin.Context) {
 
 	var body struct {
 		CustomerID  uint
-		productID   uint
+		ProductID   uint
 		Name        string
 		Description string
 		Available   bool
@@ -116,32 +135,30 @@ func AddToWishlist(c *gin.Context) {
 		helper.ShowError(c, "failed to read the body")
 		return
 	}
-	// get the current wishlist of a customer
+	// check if customer exists
 	var user models.User
 	profile := DB.First(&user, body.CustomerID)
 
 	if profile.Error != nil {
-		helper.ShowError(c, "failed to create user")
+		helper.ShowError(c, "Customer is not found")
 		return
 	}
 
 	//check product already exists or not
+	var wishlist models.WishlistOfUser
+	result := DB.Model(&wishlist).Where("product_number = ? AND wishlist_belongsto = ?", body.ProductID, body.CustomerID).Find(&wishlist)
+	if result.RowsAffected > 0 {
+		helper.ShowError(c, "product is already there")
+		return
+	}
 
-	// DB.Model(&user).
-	// 	Where("id = ?", body.productID).Association("Wishlist")
-
-	// DB.Model(&user).Association("Wishlist").Append(map[string]interface{}{
-	// 	"wishlist_product_id": body.productID,
-	// 	"name":                body.Name,
-	// 	"description":         body.Description,
-	// 	"available":           body.Available,
-	// 	"price":               body.Price})
+	//Add product in Wishlist
 	DB.Model(&user).Association("Wishlist").Append(&models.WishlistOfUser{
-		WishlistProductID: body.productID,
-		Name:              body.Name,
-		Description:       body.Description,
-		Available:         body.Available,
-		Price:             body.Price})
+		ProductNumber: body.ProductID,
+		Name:          body.Name,
+		Description:   body.Description,
+		Available:     body.Available,
+		Price:         body.Price})
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, wishlist)
 }

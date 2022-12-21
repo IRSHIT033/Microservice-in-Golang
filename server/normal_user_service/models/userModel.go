@@ -13,7 +13,7 @@ type User struct {
 	Password  string
 	Addresses []Address        `gorm:"foreignKey:Belongsto"`
 	Cart      []Product        `gorm:"foreignKey:ProductID"`
-	Wishlist  []WishlistOfUser `gorm:"foreignKey:WishlistProductID"`
+	Wishlist  []WishlistOfUser `gorm:"foreignKey:WishlistBelongsto"`
 	Orders    []Order          `gorm:"foreignKey:OrderID"`
 }
 type Address struct {
@@ -33,7 +33,8 @@ type Product struct {
 
 type WishlistOfUser struct {
 	gorm.Model
-	WishlistProductID uint
+	ProductNumber     uint
+	WishlistBelongsto uint
 	Name              string
 	Description       string
 	Available         bool

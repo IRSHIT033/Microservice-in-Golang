@@ -5,9 +5,9 @@ import (
 )
 
 func Database_sync() {
-	DB.AutoMigrate(&models.User{},
+	DB.AutoMigrate(
 		&models.Address{},
 		&models.WishlistOfUser{},
 		&models.Order{},
-		&models.Product{})
+		&models.Product{}, &models.User{})
 }
