@@ -98,24 +98,21 @@ func Validate(c *gin.Context) {
 
 func GetWishlist(c *gin.Context) {
 	DB := initializers.DB
-
-	var body struct {
-		UserID uint
-	}
-	//bind the body with the context
-	if c.Bind(&body) != nil {
-		helper.ShowError(c, "failed to read the body")
-		return
-	}
-	//Find the wishlist related to userID
+	//get id from param
+	customerID := c.Param("id")
+	//Check if the customer exists
 	var user models.User
-	profile := DB.First(&user, body.UserID)
+	profile := DB.First(&user, customerID)
 	if profile.Error != nil {
 		helper.ShowError(c, "Customer not found")
 		return
 	}
+	//get the wishlist data of the customer
 	DB.Model(&user).Association("Wishlist").Find(&user.Wishlist)
-	c.JSON(http.StatusOK, user.Wishlist)
+	//respond with the wishlist
+	c.JSON(http.StatusOK, gin.H{
+		"Wishlist": user.Wishlist,
+	})
 
 }
 
@@ -160,5 +157,39 @@ func AddToWishlist(c *gin.Context) {
 		Available:     body.Available,
 		Price:         body.Price})
 
-	c.JSON(http.StatusOK, wishlist)
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "Added product in the wishlist successfully",
+	})
+}
+
+func Removefromwishlist(c *gin.Context) {
+	DB := initializers.DB
+
+	var body struct {
+		CustomerID uint
+		ProductID  uint
+	}
+	//bind the body with the context
+	if c.Bind(&body) != nil {
+		helper.ShowError(c, "failed to read the body")
+		return
+	}
+	// check if customer exists
+	var user models.User
+	profile := DB.First(&user, body.CustomerID)
+
+	if profile.Error != nil {
+		helper.ShowError(c, "Customer is not found")
+		return
+	}
+
+	//check product already exists or not
+	//Delete the product from the Wishlist
+
+	var wishlist models.WishlistOfUser
+	DB.Model(&wishlist).Where("product_number = ? AND wishlist_belongsto = ?", body.ProductID, body.CustomerID).Delete(&wishlist)
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "successfully deleted message",
+	})
+
 }

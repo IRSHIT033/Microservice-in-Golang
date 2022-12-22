@@ -18,7 +18,8 @@ func main() {
 	r.POST("/signup", controllers.SignUp)
 	r.POST("/login", controllers.Login)
 	r.GET("/validate", middleware.Authorization, controllers.Validate)
-	r.POST("/addtowishlist", controllers.AddToWishlist)
-	r.GET("/wishlist", controllers.GetWishlist)
+	r.PATCH("/addtowishlist", middleware.Authorization, controllers.AddToWishlist)
+	r.PATCH("/removefromwishlist", middleware.Authorization, controllers.Removefromwishlist)
+	r.GET("/wishlist/:id", middleware.Authorization, controllers.GetWishlist)
 	r.Run()
 }
