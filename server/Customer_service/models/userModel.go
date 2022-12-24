@@ -12,11 +12,13 @@ type User struct {
 	Name      string
 	Password  string
 	Addresses []Address        `gorm:"foreignKey:Belongsto"`
-	Cart      []Product        `gorm:"foreignKey:ProductID"`
+	Cart      []Product        `gorm:"foreignKey:AddedBy"`
 	Wishlist  []WishlistOfUser `gorm:"foreignKey:WishlistBelongsto"`
 	Orders    []Order          `gorm:"foreignKey:OrderID"`
 }
+
 type Address struct {
+	gorm.Model
 	Belongsto  uint
 	Street     string
 	PostalCode string
@@ -25,15 +27,18 @@ type Address struct {
 
 type Product struct {
 	gorm.Model
-	ProductID uint
-	Name      string
-	Price     string
-	unit      int
+	AddedBy         uint
+	ProductID       uint
+	ProductImageSrc string
+	Name            string
+	Price           int
+	Unit            int
 }
 
 type WishlistOfUser struct {
 	gorm.Model
 	ProductNumber     uint
+	ProductImageSrc   string
 	WishlistBelongsto uint
 	Name              string
 	Description       string
