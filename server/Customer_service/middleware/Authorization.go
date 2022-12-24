@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/IRSHIT033/E-comm-GO-/server/normal_user_service/initializers"
-	"github.com/IRSHIT033/E-comm-GO-/server/normal_user_service/models"
+	"github.com/IRSHIT033/E-comm-GO-/server/Customer_service/initializers"
+	"github.com/IRSHIT033/E-comm-GO-/server/Customer_service/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 )
