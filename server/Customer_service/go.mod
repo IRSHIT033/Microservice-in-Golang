@@ -3,7 +3,6 @@ module github.com/IRSHIT033/E-comm-GO-/server/Customer_service
 go 1.19
 
 require (
-	github.com/IRSHIT033/E-comm-GO-/server/normal_user_service v0.0.0-20221222193124-e87f6c90d203
 	github.com/gin-gonic/gin v1.8.2
 	github.com/golang-jwt/jwt/v4 v4.4.3
 	github.com/joho/godotenv v1.4.0
