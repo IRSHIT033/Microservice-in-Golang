@@ -1,6 +1,4 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/IRSHIT033/E-comm-GO-/server/normal_user_service v0.0.0-20221222193124-e87f6c90d203 h1:HIgtNEsodLu+YuKtsjP4qYhCSntyOiyKeyWyp0d4Avc=
-github.com/IRSHIT033/E-comm-GO-/server/normal_user_service v0.0.0-20221222193124-e87f6c90d203/go.mod h1:ZJLcBT61qMSxsuAOSHHrHufdCFn41HVCg/3TlD3xw+w=
 github.com/Masterminds/semver/v3 v3.1.1 h1:hLg3sBzpNErnxhQtUy/mmLR2I9foDujNK030IGemrRc=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
 github.com/cockroachdb/apd v1.1.0 h1:3LFP3629v+1aKXU5Q37mxmRxX/pIu1nijXydLShEq5I=

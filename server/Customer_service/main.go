@@ -27,16 +27,16 @@ func main() {
 	//get wishlist of a user
 	r.GET("/wishlist/:id", middleware.Authorization, controllers.GetWishlist)
 	//add item into wishlist of a user
-	r.PATCH("/addtowishlist", middleware.Authorization, controllers.AddToWishlist)
+	r.PATCH("/addtowishlist/:id", middleware.Authorization, controllers.AddToWishlist)
 	//remove item from wishlist of a user
-	r.PATCH("/removefromwishlist", middleware.Authorization, controllers.Removefromwishlist)
+	r.PATCH("/removefromwishlist/:id", middleware.Authorization, controllers.Removefromwishlist)
 
 	//get cart of a user
 	r.GET("/getCart/:id", middleware.Authorization, controllers.GetCart)
 	//add item to cart
-	r.PATCH("/addtocart", middleware.Authorization, controllers.AddToCart)
+	r.PATCH("/addtocart/:id", middleware.Authorization, controllers.AddToCart)
 	//remove item from cart
-	r.PATCH("/removefromCart", middleware.Authorization, controllers.RemoveFromCart)
+	r.PATCH("/removefromCart/:id", middleware.Authorization, controllers.RemoveFromCart)
 
 	r.Run()
 }
