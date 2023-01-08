@@ -1,42 +1,24 @@
 package main
 
 import (
-	"github.com/IRSHIT033/E-comm-GO-/server/Customer_service/controllers"
-	"github.com/IRSHIT033/E-comm-GO-/server/Customer_service/initializers"
-	"github.com/IRSHIT033/E-comm-GO-/server/Customer_service/middleware"
+	"log"
+
+	"github.com/IRSHIT033/E-comm-GO-/server/Customer_service/database"
+	"github.com/IRSHIT033/E-comm-GO-/server/Customer_service/registry"
+	"github.com/IRSHIT033/E-comm-GO-/server/Customer_service/router"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
-func init() {
-	//Env variable initializer
-	initializers.Envinitializer()
-	//data base connection
-	initializers.Connect_DB()
-	initializers.Database_sync()
-}
-
 func main() {
-	r := gin.Default()
-	//create user
-	r.POST("/signup", controllers.SignUp)
-	//login user
-	r.POST("/login", controllers.Login)
-	//user authenticator
-	r.GET("/validate", middleware.Authorization, controllers.Validate)
-
-	//get wishlist of a user
-	r.GET("/wishlist/:id", middleware.Authorization, controllers.GetWishlist)
-	//add item into wishlist of a user
-	r.PATCH("/addtowishlist/:id", middleware.Authorization, controllers.AddToWishlist)
-	//remove item from wishlist of a user
-	r.PATCH("/removefromwishlist/:id", middleware.Authorization, controllers.Removefromwishlist)
-
-	//get cart of a user
-	r.GET("/getCart/:id", middleware.Authorization, controllers.GetCart)
-	//add item to cart
-	r.PATCH("/addtocart/:id", middleware.Authorization, controllers.AddToCart)
-	//remove item from cart
-	r.PATCH("/removefromCart/:id", middleware.Authorization, controllers.RemoveFromCart)
-
-	r.Run()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	db := database.CreatedatabaseInstance()
+	reg := registry.NewRegistry(db)
+	routes := gin.Default()
+	routes = router.NewRouter(routes, reg.NewAppController())
+	//port := os.Getenv("PORT")
+	routes.Run(":5000")
 }
