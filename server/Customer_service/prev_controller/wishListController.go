@@ -1,4 +1,4 @@
-package controllers
+package controller
 
 import (
 	"net/http"
@@ -9,47 +9,37 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetCart(c *gin.Context) {
-
+func GetWishlist(c *gin.Context) {
 	DB := initializers.DB
-
 	//get id from param
 	customerID := c.Param("id")
-
 	//Check if the customer exists
 	var user models.User
 	profile := DB.First(&user, customerID)
-
 	if profile.Error != nil {
 		helper.ShowError(c, "Customer not found")
 		return
 	}
-
-	var cart []models.Product
-
-	//get the cart of a specific user
-	DB.Model(&user).Association("Cart").Find(&cart)
-
-	//respond with cart
+	//get the wishlist data of the customer
+	DB.Model(&user).Association("Wishlist").Find(&user.Wishlist)
+	//respond with the wishlist
 	c.JSON(http.StatusOK, gin.H{
-		"result": cart,
+		"Wishlist": user.Wishlist,
 	})
 
 }
 
-func AddToCart(c *gin.Context) {
-
+func AddToWishlist(c *gin.Context) {
 	DB := initializers.DB
 
 	var body struct {
-		CustomerID      uint
-		ProductID       uint
-		ProductImageSrc string
-		Name            string
-		Price           int
-		Unit            int
+		CustomerID  uint
+		ProductID   uint
+		Name        string
+		Description string
+		Available   bool
+		Price       int
 	}
-
 	//bind the body with the context
 	if c.Bind(&body) != nil {
 		helper.ShowError(c, "failed to read the body")
@@ -63,38 +53,37 @@ func AddToCart(c *gin.Context) {
 		helper.ShowError(c, "Customer is not found")
 		return
 	}
+
 	//check product already exists or not
-	var cart models.Product
-	result := DB.Model(&cart).Where("product_id = ? AND added_by = ?", body.ProductID, body.CustomerID).Find(&cart)
+	var wishlist models.WishlistOfUser
+	result := DB.Model(&wishlist).Where("product_number = ? AND wishlist_belongsto = ?", body.ProductID, body.CustomerID).Find(&wishlist)
 	if result.RowsAffected > 0 {
 		helper.ShowError(c, "product is already there")
 		return
 	}
 
-	//Add product in Cart
-	DB.Model(&user).Association("Cart").Append(&models.Product{
-		ProductID:       body.ProductID,
-		ProductImageSrc: body.ProductImageSrc,
-		Name:            body.Name,
-		Price:           body.Price,
-		Unit:            body.Unit,
-	})
-	//respond with success msg
+	//Add product in Wishlist
+	DB.Model(&user).Association("Wishlist").Append(&models.WishlistOfUser{
+		ProductNumber: body.ProductID,
+		Name:          body.Name,
+		Description:   body.Description,
+		Available:     body.Available,
+		Price:         body.Price})
+
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "Added product in the wishlist successfully",
 	})
 }
 
-func RemoveFromCart(c *gin.Context) {
+func Removefromwishlist(c *gin.Context) {
+
 	DB := initializers.DB
 
 	var body struct {
 		CustomerID uint
 		ProductID  uint
 	}
-
 	//bind the body with the context
-
 	if c.Bind(&body) != nil {
 		helper.ShowError(c, "failed to read the body")
 		return
@@ -108,12 +97,13 @@ func RemoveFromCart(c *gin.Context) {
 		return
 	}
 
-	//Delete the product from the CART
+	//check product already exists or not
+	//Delete the product from the Wishlist
 
-	var cart models.Product
-	DB.Model(&cart).Where("product_id = ? AND added_by = ?", body.ProductID, body.CustomerID).Delete(&cart)
+	var wishlist models.WishlistOfUser
+	DB.Model(&wishlist).Where("product_number = ? AND wishlist_belongsto = ?", body.ProductID, body.CustomerID).Delete(&wishlist)
 	c.JSON(http.StatusOK, gin.H{
-		"msg": "successfully removed item from cart",
+		"msg": "successfully removed item from wishlist",
 	})
 
 }
