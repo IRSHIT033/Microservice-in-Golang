@@ -15,3 +15,12 @@ func (up *userPresenter) ResponseUser(us *model.User) *model.User {
 
 	return us
 }
+
+func (up *userPresenter) ResponseWithMessage(msg string) string {
+
+	return msg
+}
+
+func (up *userPresenter) ResponseProducts(products []*model.Product) []*model.Product {
+	return products
+}
