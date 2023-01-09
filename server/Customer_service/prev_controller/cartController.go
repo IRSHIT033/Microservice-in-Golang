@@ -79,7 +79,9 @@ func AddToCart(c *gin.Context) {
 		Price:           body.Price,
 		Unit:            body.Unit,
 	})
+
 	//respond with success msg
+
 	c.JSON(http.StatusOK, gin.H{
 		"msg": "Added product in the wishlist successfully",
 	})

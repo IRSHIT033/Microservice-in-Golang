@@ -6,6 +6,10 @@ import (
 
 type UserRepository interface {
 	Find(*model.User) (*model.User, error)
+	Save(*model.User) (*model.User, error)
+	AddProduct(*model.Product) (string, error)
+	GetCart(uint) ([]*model.Product, error)
+	RemoveProduct(uint, uint) (string, error)
 	// GetExistingCustomer(email string, password string) model.User
 	// CreateCustomer(user model.User) model.User
 	// GetCartofCustomer(CustomerID uint) model.Product

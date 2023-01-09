@@ -13,6 +13,10 @@ type userInteractor struct {
 
 type UserInteractor interface {
 	Get(*model.User) (*model.User, error)
+	Create(*model.User) (*model.User, error)
+	AddProductToCustomersCart(*model.Product) (string, error)
+	GetProductinCustomersCart(uint) ([]*model.Product, error)
+	RemoveProductFromCustomersCart(uint, uint) (string, error)
 }
 
 func NewUserInteractor(repo repository.UserRepository, pres presenter.UserPresenter) UserInteractor {
@@ -25,4 +29,37 @@ func (us *userInteractor) Get(u *model.User) (*model.User, error) {
 		return nil, err
 	}
 	return us.UserPresenter.ResponseUser(u), nil
+}
+
+func (us *userInteractor) Create(u *model.User) (*model.User, error) {
+	u, err := us.UserRepository.Save(u)
+	if err != nil {
+		return nil, err
+	}
+	return us.UserPresenter.ResponseUser(u), nil
+}
+
+func (us *userInteractor) AddProductToCustomersCart(product *model.Product) (string, error) {
+	msg, err := us.UserRepository.AddProduct(product)
+	if err != nil {
+		return "Error in the uscase Interactor", err
+	}
+	return us.UserPresenter.ResponseWithMessage(msg), nil
+}
+
+func (us *userInteractor) GetProductinCustomersCart(userId uint) ([]*model.Product, error) {
+	var products []*model.Product
+	products, err := us.UserRepository.GetCart(userId)
+	if err != nil {
+		return nil, err
+	}
+	return us.UserPresenter.ResponseProducts(products), nil
+}
+
+func (us *userInteractor) RemoveProductFromCustomersCart(userID uint, productId uint) (string, error) {
+	msg, err := us.UserRepository.RemoveProduct(userID, productId)
+	if err != nil {
+		return "Error in the uscase Interactor", err
+	}
+	return us.UserPresenter.ResponseWithMessage(msg), nil
 }
