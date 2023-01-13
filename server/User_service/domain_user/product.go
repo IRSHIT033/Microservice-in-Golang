@@ -25,5 +25,5 @@ type Productrepository interface {
 type ProductUseCase interface {
 	Add(c context.Context, product *Product) error
 	FetchByUserID(c context.Context, userID uint) ([]Product, error)
-	Remove(c context.Context, product *Product) error
+	Remove(c context.Context, productID uint, userID uint) error
 }
