@@ -66,6 +66,7 @@ func (pr *productRepository) FetchByUserID(c context.Context, userID uint) ([]do
 
 	return cart, nil
 }
+
 func (pr *productRepository) Remove(c context.Context, productID uint, userID uint) error {
 	var product domain_user.Product
 	var user domain_user.User
