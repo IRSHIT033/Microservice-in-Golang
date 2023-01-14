@@ -19,27 +19,23 @@ func (pc *ProductController) AddProductToCustomers(c *gin.Context) {
 	err := c.ShouldBind(&product)
 
 	if err != nil {
-		fmt.Print("1")
 		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
 		return
 	}
 
 	userID := c.GetString("x-user-id")
-	fmt.Println(userID)
 	userid, err := strconv.ParseUint(userID, 10, 32)
 	product.AddedBy = uint(userid)
 
 	fmt.Println(product.AddedBy)
 
 	if err != nil {
-		fmt.Print("2")
 		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
 		return
 	}
 
 	err = pc.ProductUsecase.Add(c, &product)
 	if err != nil {
-		fmt.Print("3")
 		c.JSON(http.StatusInternalServerError, domain_user.ErrorResponse{Message: err.Error()})
 		return
 	}
@@ -48,4 +44,55 @@ func (pc *ProductController) AddProductToCustomers(c *gin.Context) {
 		Message: "product added to cart successfully",
 	})
 
+}
+
+func (pc *ProductController) GetproductOfUser(c *gin.Context) {
+
+	userid, err := strconv.ParseUint(c.GetString("x-user-id"), 10, 32)
+	userID := uint(userid)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	cart, err := pc.ProductUsecase.FetchByUserID(c, userID)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domain_user.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, cart)
+
+}
+
+func (pc *ProductController) RemoveProductFromCart(c *gin.Context) {
+
+	productid, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	productID := uint(productid)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	userid, err := strconv.ParseUint(c.GetString("x-user-id"), 10, 32)
+	userID := uint(userid)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	err = pc.ProductUsecase.Remove(c, productID, userID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, domain_user.SuccessResponse{
+		Message: "product deleted to cart successfully",
+	})
 }
