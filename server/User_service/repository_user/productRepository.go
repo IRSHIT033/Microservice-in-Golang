@@ -73,7 +73,6 @@ func (pr *productRepository) Remove(c context.Context, productID uint, userID ui
 	//find user
 
 	err := pr.database.First(&user, userID).Error
-
 	if err != nil {
 		return err
 	}

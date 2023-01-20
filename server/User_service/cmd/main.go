@@ -12,7 +12,7 @@ func main() {
 	app := bootstrap.App()
 	db := app.DB
 	gin := gin.Default()
-	routerV1 := gin.Group("v1")
+	routerV1 := gin.Group("user")
 	timeout := time.Duration(24) * time.Second
 	routeV1.Setup(db, timeout, routerV1)
 	gin.Run(":5000")
