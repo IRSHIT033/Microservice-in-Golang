@@ -12,7 +12,7 @@ type productUsecase struct {
 	contextTimeout    time.Duration
 }
 
-func NewProductUsecase(productRepository domain_user.Productrepository, timeout time.Duration) domain_user.Productrepository {
+func NewProductUsecase(productRepository domain_user.Productrepository, timeout time.Duration) domain_user.ProductUseCase {
 	return &productUsecase{
 		productRepository: productRepository,
 		contextTimeout:    timeout,

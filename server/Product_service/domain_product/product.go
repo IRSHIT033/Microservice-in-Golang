@@ -19,6 +19,10 @@ type Product struct {
 	Category        string
 }
 
+type CategoryRequest struct {
+	Category []string `json:"categories" binding:"required"`
+}
+
 type ProductRepository interface {
 	Create(c context.Context, product Product) error
 	Fetch(c context.Context) ([]Product, error)
