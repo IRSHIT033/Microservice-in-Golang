@@ -16,5 +16,5 @@ func NewOrderRoute(timeout time.Duration, db *gorm.DB, group *gin.RouterGroup) {
 		OrderUsecase: usecase.NewOrderUsecase(pr, timeout),
 	}
 	group.POST("/create", pc.CreateOrder)
-	group.GET("/fetch", pc.FetchOrders)
+	group.POST("/fetch", pc.FetchOrders)
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/IRSHIT033/E-comm-GO-/server/Product_service/domain_product"
+	"github.com/IRSHIT033/E-comm-GO-/server/Order_service/domain_order"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -31,7 +31,9 @@ func CreatedatabaseInstance() *gorm.DB {
 	//migrate all databases
 
 	db.AutoMigrate(
-		&domain_product.Product{},
+		&domain_order.Cart{},
+		&domain_order.Order{},
+		&domain_order.Product{},
 	)
 
 	return db

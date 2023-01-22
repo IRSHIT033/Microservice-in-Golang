@@ -2,33 +2,36 @@ package domain_order
 
 import (
 	"context"
+	"time"
 
 	"gorm.io/gorm"
 )
 
 type Order struct {
-	gorm.Model
+	OrderID       uint `gorm:"primarykey"`
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	DeletedAt     gorm.DeletedAt `gorm:"index"`
 	CustomerId    uint
 	Amount        int
 	Status        string
 	TransactionId uint
-	Products      []Product `gorm:"foreignKey:AddedBy"`
+	Products      []Product `gorm:"many2many:Products_In_Order;"`
 }
 
 type Cart struct {
-	gorm.Model
+	CartID     uint `gorm:"primarykey"`
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	DeletedAt  gorm.DeletedAt `gorm:"index"`
 	CustomerId uint
-	Items      ItemList
-}
-
-type ItemList struct {
-	Products []Product `gorm:"foreignKey:AddedBy"`
-	Unit     int
+	Products   []Product `gorm:"many2many:Products_In_Cart;"`
+	Unit       int
 }
 
 type Product struct {
 	gorm.Model
-	AddedBy         uint
+	AddedIn         uint
 	ProductID       uint
 	ProductImageSrc string
 	Name            string
