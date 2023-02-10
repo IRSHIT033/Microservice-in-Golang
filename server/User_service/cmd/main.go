@@ -15,5 +15,6 @@ func main() {
 	routerV1 := gin.Group("user")
 	timeout := time.Duration(24) * time.Second
 	routeV1.Setup(db, timeout, routerV1)
+
 	gin.Run(":5000")
 }

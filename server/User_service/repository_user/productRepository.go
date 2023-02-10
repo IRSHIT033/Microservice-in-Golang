@@ -19,7 +19,7 @@ func NewProductRepository(db *gorm.DB) domain_user.Productrepository {
 }
 
 func (pr *productRepository) Add(c context.Context, product *domain_user.Product) error {
-	//find user
+	// find user
 	var user domain_user.User
 	err := pr.database.First(&user, product.AddedBy).Error
 
@@ -61,7 +61,7 @@ func (pr *productRepository) FetchByUserID(c context.Context, userID uint) ([]do
 		return cart, err
 	}
 
-	//get cart of user
+	// get cart of user
 	pr.database.Model(&user).Association("Cart").Find(&cart)
 
 	return cart, nil
@@ -70,7 +70,7 @@ func (pr *productRepository) FetchByUserID(c context.Context, userID uint) ([]do
 func (pr *productRepository) Remove(c context.Context, productID uint, userID uint) error {
 	var product domain_user.Product
 	var user domain_user.User
-	//find user
+	// find user
 
 	err := pr.database.First(&user, userID).Error
 	if err != nil {

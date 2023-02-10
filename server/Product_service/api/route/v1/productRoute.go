@@ -20,5 +20,5 @@ func NewProductRoute(timeout time.Duration, db *gorm.DB, group *gin.RouterGroup)
 	group.GET("/fetchallProduct", pc.FetchAllProducts)
 	group.GET("/fetchbycategory", pc.FetchbyCategory)
 	group.POST("/fetch/:id", pc.FetchbyId)
-
+	group.POST("/rpcCall", pc.SendProductViaRPC)
 }

@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/IRSHIT033/E-comm-GO-/server/User_service/domain_user"
+	"github.com/IRSHIT033/E-comm-GO-/server/User_service/grpc_client"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,9 +14,11 @@ type ProductController struct {
 }
 
 func (pc *ProductController) AddProductToCustomers(c *gin.Context) {
-	var product domain_user.Product
 
-	err := c.ShouldBind(&product)
+	var Productidreq domain_user.ProductIdRequest
+	err := c.ShouldBind(&Productidreq)
+
+	product := grpc_client.GetProductViaGRPC(Productidreq.ProductId)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
@@ -26,8 +28,6 @@ func (pc *ProductController) AddProductToCustomers(c *gin.Context) {
 	userID := c.GetString("x-user-id")
 	userid, err := strconv.ParseUint(userID, 10, 32)
 	product.AddedBy = uint(userid)
-
-	fmt.Println(product.AddedBy)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})

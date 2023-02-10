@@ -13,7 +13,7 @@ type Product struct {
 	ProductImageSrc string
 	Name            string
 	Description     string
-	Price           int
+	Price           float32
 	Unit            int
 	Available       bool
 	Category        string

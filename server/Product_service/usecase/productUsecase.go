@@ -24,16 +24,19 @@ func (pu *productUsecase) Create(c context.Context, product domain_product.Produ
 	defer cancel()
 	return pu.productRepository.Create(ctx, product)
 }
+
 func (pu *productUsecase) Fetch(c context.Context) ([]domain_product.Product, error) {
 	ctx, cancel := context.WithTimeout(c, pu.contextTimeout)
 	defer cancel()
 	return pu.productRepository.Fetch(ctx)
 }
+
 func (pu *productUsecase) FetchbyId(c context.Context, productID uint) (domain_product.Product, error) {
 	ctx, cancel := context.WithTimeout(c, pu.contextTimeout)
 	defer cancel()
 	return pu.productRepository.FetchbyId(ctx, productID)
 }
+
 func (pu *productUsecase) FetchbyCategory(c context.Context, categories []string) ([]domain_product.Product, error) {
 	ctx, cancel := context.WithTimeout(c, pu.contextTimeout)
 	defer cancel()

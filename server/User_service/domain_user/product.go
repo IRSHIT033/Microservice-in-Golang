@@ -12,8 +12,11 @@ type Product struct {
 	ProductID       uint
 	ProductImageSrc string
 	Name            string
-	Price           int
+	Description     string
+	Price           float32
 	Unit            int
+	Available       bool
+	Category        string
 }
 
 type Productrepository interface {

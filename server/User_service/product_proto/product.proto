@@ -1,0 +1,31 @@
+syntax="proto3";
+
+package product_proto;
+
+option go_package = "/product_proto";
+
+message Product{
+    uint32    AddedBy=2;
+    uint32	ProductID=3;          
+	string ProductImageSrc =4 ;   
+	string Name =5;              
+    string	Description=6;        
+    float	Price =7;             
+    int32	Unit   =8;            
+	bool Available=9;          
+    string	Category =10;  
+
+}
+
+message ProductRequest {
+     string productId = 1;
+
+}
+
+message ProductResponse {
+    Product productresp=1;      
+}
+
+service ProductService {
+     rpc SendProduct(ProductRequest) returns (ProductResponse);
+}

@@ -5,6 +5,7 @@ import (
 
 	routeV1 "github.com/IRSHIT033/E-comm-GO-/server/Product_service/api/route/v1"
 	"github.com/IRSHIT033/E-comm-GO-/server/Product_service/bootstrap"
+	"github.com/IRSHIT033/E-comm-GO-/server/Product_service/grpc_config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,5 +17,8 @@ func main() {
 
 	timeout := time.Duration(24) * time.Second
 	routeV1.Setup(db, timeout, productRoutes)
+
+	go grpc_config.GRPCListen(db)
 	gin.Run(":5001")
+
 }

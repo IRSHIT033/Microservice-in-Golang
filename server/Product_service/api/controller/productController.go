@@ -2,6 +2,8 @@ package controller
 
 import (
 	"net/http"
+	"net/rpc"
+
 	"strconv"
 
 	"github.com/IRSHIT033/E-comm-GO-/server/Product_service/domain_product"
@@ -86,4 +88,25 @@ func (pc *ProductController) FetchbyCategory(c *gin.Context) {
 
 	c.JSON(http.StatusOK, products)
 
+}
+
+func (pc *ProductController) SendProductViaRPC(c *gin.Context) {
+	client, err := rpc.Dial("tcp", "localhost:5050")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain_product.ErrorResponse{Message: err.Error()})
+		return
+	}
+	rpcPayload := domain_product.RPCPayload{
+		Name: "hi",
+		Data: "irshit",
+	}
+	var res string
+
+	err = client.Call("RPCServer.GetProduct", rpcPayload, &res)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain_product.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
 }

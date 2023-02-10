@@ -97,7 +97,7 @@ func handlePayload(payload Payload) {
 		if err != nil {
 			log.Println(err)
 		}
-	case "product":				
+	case "product":
 	case "auth":
 		//authenticate
 	default:

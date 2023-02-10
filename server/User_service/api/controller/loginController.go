@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -40,8 +41,13 @@ func (lc *LoginController) Login(c *gin.Context) {
 
 	secret_key := os.Getenv("SECRET_KEY")
 	expiry_time := os.Getenv("EXPIRY_TIME")
-	expiry, _ := strconv.Atoi(expiry_time)
+	expiry, err := strconv.Atoi(expiry_time)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, domain_user.ErrorResponse{Message: err.Error()})
+		return
+	}
 
+	log.Println(expiry)
 	accessToken, err := lc.LoginUsecase.CreateAccessToken(&user, secret_key, expiry)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, domain_user.ErrorResponse{Message: err.Error()})
