@@ -36,3 +36,9 @@ func (pu *productUsecase) FetchByUserID(c context.Context, userID uint) ([]domai
 	defer cancel()
 	return pu.productRepository.FetchByUserID(ctx, userID)
 }
+
+func (pu *productUsecase) FetchUserCart(c context.Context, userID uint) (domain_user.User, error) {
+	ctx, cancel := context.WithTimeout(c, pu.contextTimeout)
+	defer cancel()
+	return pu.productRepository.FetchUserCart(ctx, userID)
+}

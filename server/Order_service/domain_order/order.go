@@ -13,7 +13,7 @@ type Order struct {
 	UpdatedAt     time.Time
 	DeletedAt     gorm.DeletedAt `gorm:"index"`
 	CustomerId    uint
-	Amount        int
+	Amount        float32
 	Status        string
 	TransactionId uint
 	Products      []Product `gorm:"many2many:Products_In_Order;"`
@@ -36,7 +36,7 @@ type Product struct {
 	ProductImageSrc string
 	Name            string
 	Description     string
-	Price           int
+	Price           float32
 	Unit            int
 	Available       bool
 	Category        string

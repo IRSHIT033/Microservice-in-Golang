@@ -1,55 +1,25 @@
 version: '3'
 services:
-  app:
-    container_name: full_app
-    build: 
-      context: ./Customer_service
-    ports: 
-      - 5000:5000 
-    restart: on-failure
-    volumes:
-      - api:/usr/src/app/
-    depends_on:
-     - fullstack-postgres          
-     
-    networks:
-      - fullstack
-
-
-  fullstack-postgres:
-    image: postgres:latest
-    container_name: full_db_postgres
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    hostname: zookeeper
+    container_name: zookeeper
     environment:
-      - POSTGRES_USER=${DB_USER}  
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-      - DATABASE_HOST=${DB_HOST} 
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: broker
     ports:
-      - 5432:5432
-    volumes:
-      - database_postgres:/var/lib/postgresql/data
-    networks:
-      - fullstack
-    
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_container
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      - "9092:9092"
     depends_on:
-      - fullstack-postgres
-    ports:
-      - "5050:80"
-    networks:
-      - fullstack
-    restart: unless-stopped
-
-volumes:
-  api:
-  database_postgres:
-
-# Networks to be created to facilitate communication between containers
-networks:
-  fullstack:
-    driver: bridge    
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1

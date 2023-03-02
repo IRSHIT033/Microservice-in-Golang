@@ -6,6 +6,7 @@ import (
 
 	"github.com/IRSHIT033/E-comm-GO-/server/User_service/domain_user"
 	"github.com/IRSHIT033/E-comm-GO-/server/User_service/grpc_client"
+	"github.com/IRSHIT033/E-comm-GO-/server/User_service/kafka_producer"
 	"github.com/gin-gonic/gin"
 )
 
@@ -95,4 +96,28 @@ func (pc *ProductController) RemoveProductFromCart(c *gin.Context) {
 	c.JSON(http.StatusOK, domain_user.SuccessResponse{
 		Message: "product deleted to cart successfully",
 	})
+}
+
+func (pc *ProductController) GetCartWithUser(c *gin.Context) {
+
+	userid, err := strconv.ParseUint(c.GetString("x-user-id"), 10, 32)
+	userID := uint(userid)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	var user domain_user.User
+	user, err = pc.ProductUsecase.FetchUserCart(c, userID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, domain_user.ErrorResponse{Message: err.Error()})
+		return
+	}
+
+	kafka_producer.ProduceCart(user)
+
+	c.JSON(http.StatusOK, user)
+
 }

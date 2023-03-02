@@ -43,7 +43,7 @@ func (or *orderRepository) Create(c context.Context, CustomerId uint, transactio
 	}
 
 	//calculate amount
-	var amount int
+	var amount float32
 	for _, item := range products {
 		amount += item.Price
 	}

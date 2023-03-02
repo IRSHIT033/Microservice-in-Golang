@@ -12,7 +12,7 @@ type User struct {
 	Name      string
 	Password  string
 	Addresses []Address `gorm:"foreignKey:Belongsto"`
-	Cart      []Product `gorm:"foreignKey:AddedBy"`
+	Cart      []Product `gorm:"many2many:Products_In_Cart;"`
 }
 
 type Address struct {

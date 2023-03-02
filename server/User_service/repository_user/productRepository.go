@@ -81,3 +81,18 @@ func (pr *productRepository) Remove(c context.Context, productID uint, userID ui
 
 	return nil
 }
+func (pr *productRepository) FetchUserCart(c context.Context, userID uint) (domain_user.User, error) {
+	var user domain_user.User
+
+	//Check if the customer exists
+	err := pr.database.First(&user, userID).Error
+
+	if err != nil {
+		return user, err
+	}
+
+	// get cart of user
+	pr.database.Preload("Cart").Where("id = ?", userID).Find(&user)
+
+	return user, nil
+}

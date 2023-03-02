@@ -19,6 +19,7 @@ func NewProductRoute(timeout time.Duration, db *gorm.DB, group *gin.RouterGroup)
 
 	group.PUT("/addproductToCart", pc.AddProductToCustomers)
 	group.PUT("/removeFromCart/:id", pc.RemoveProductFromCart)
+	group.GET("/getcartwithUser", pc.GetCartWithUser)
 	group.GET("/getCartofauser", pc.GetproductOfUser)
 
 }
