@@ -5,6 +5,7 @@ import (
 
 	routeV1 "github.com/IRSHIT033/E-comm-GO-/server/Order_service/api/route/v1"
 	"github.com/IRSHIT033/E-comm-GO-/server/Order_service/bootstrap"
+	"github.com/IRSHIT033/E-comm-GO-/server/Order_service/kafka_consumer"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,6 +17,6 @@ func main() {
 	timeout := time.Duration(24) * time.Second
 
 	routeV1.Setup(db, timeout, routerV1)
-
+	go kafka_consumer.ConsumeCart()
 	gin.Run(":5003")
 }
