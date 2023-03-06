@@ -9,6 +9,7 @@ import (
 	"github.com/IRSHIT033/E-comm-GO-/server/User_service/product_proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"gorm.io/gorm"
 )
 
 func GetProductViaGRPC(productId uint) domain_user.Product {
@@ -32,8 +33,7 @@ func GetProductViaGRPC(productId uint) domain_user.Product {
 	}
 
 	return domain_user.Product{
-		AddedBy:         uint(response.Productresp.AddedBy),
-		ProductID:       uint(response.Productresp.ProductID),
+		Model:           gorm.Model{ID: uint(response.Productresp.ProductID)},
 		ProductImageSrc: response.Productresp.ProductImageSrc,
 		Name:            response.Productresp.Name,
 		Category:        response.Productresp.Category,

@@ -19,10 +19,10 @@ func NewProductUsecase(productRepository domain_user.Productrepository, timeout 
 	}
 }
 
-func (pu *productUsecase) Add(c context.Context, product *domain_user.Product) error {
+func (pu *productUsecase) Add(c context.Context, userId uint, product *domain_user.Product) error {
 	ctx, cancel := context.WithTimeout(c, pu.contextTimeout)
 	defer cancel()
-	return pu.productRepository.Add(ctx, product)
+	return pu.productRepository.Add(ctx, userId, product)
 }
 
 func (pu *productUsecase) Remove(c context.Context, productID uint, userID uint) error {

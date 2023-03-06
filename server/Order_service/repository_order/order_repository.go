@@ -62,6 +62,7 @@ func (or *orderRepository) Create(c context.Context, CustomerId uint, transactio
 
 	return nil
 }
+
 func (or *orderRepository) Fetch(c context.Context, CustomerId uint) ([]domain_order.Order, error) {
 	var all_orders []domain_order.Order
 	fmt.Println(CustomerId)

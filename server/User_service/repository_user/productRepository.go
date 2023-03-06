@@ -2,9 +2,9 @@ package repository_user
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/IRSHIT033/E-comm-GO-/server/User_service/domain_user"
+	"github.com/IRSHIT033/E-comm-GO-/server/User_service/kafka_producer"
 	"gorm.io/gorm"
 )
 
@@ -18,28 +18,28 @@ func NewProductRepository(db *gorm.DB) domain_user.Productrepository {
 	}
 }
 
-func (pr *productRepository) Add(c context.Context, product *domain_user.Product) error {
+func (pr *productRepository) Add(c context.Context, customerId uint, product *domain_user.Product) error {
 	// find user
 	var user domain_user.User
-	err := pr.database.First(&user, product.AddedBy).Error
+	err := pr.database.First(&user, customerId).Error
 
 	if err != nil {
 		return err
 	}
-	// check if product already exists in user's cart or not
-	result := pr.database.Model(&product).Where("product_id = ? AND added_by = ?", product.ProductID, product.AddedBy).Find(&product)
+	// // check if product already exists in user's cart or not
+	// result := pr.database.Model(&product).Where("product_id = ? AND added_by = ?", product.ProductID, product.AddedBy).Find(&product)
 
-	if result.Error != nil {
-		return result.Error
-	}
+	// if result.Error != nil {
+	// 	return result.Error
+	// }
 
-	if result.RowsAffected > 0 {
-		return fmt.Errorf(" product already exist in cart")
-	}
+	// if result.RowsAffected > 0 {
+	// 	return fmt.Errorf(" product already exist in cart")
+	// }
 
 	// add product to the user's cart
 	pr.database.Model(&user).Association("Cart").Append(&domain_user.Product{
-		ProductID:       product.ProductID,
+		Model:           gorm.Model{ID: product.ID},
 		ProductImageSrc: product.ProductImageSrc,
 		Name:            product.Name,
 		Price:           product.Price,
@@ -77,10 +77,24 @@ func (pr *productRepository) Remove(c context.Context, productID uint, userID ui
 		return err
 	}
 
-	pr.database.Model(&product).Where("product_id = ? AND added_by = ?", productID, userID).Delete(&product)
+	err = pr.database.First(&product, productID).Error
+	if err != nil {
+		return err
+	}
+
+	//send the "adding product to cart" message to kafka broker
+	var cart domain_user.KafkaMessagePayload
+	cart.CustomerId = userID
+	cart.Product = product
+	cart.Operation = "Remove"
+	go kafka_producer.ProduceCart(cart)
+	////////////////////////////////////////////////////////////
+
+	pr.database.Model(&user).Association("Cart").Delete(&product)
 
 	return nil
 }
+
 func (pr *productRepository) FetchUserCart(c context.Context, userID uint) (domain_user.User, error) {
 	var user domain_user.User
 

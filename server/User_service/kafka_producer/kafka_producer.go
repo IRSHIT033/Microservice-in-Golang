@@ -1,7 +1,7 @@
 package kafka_producer
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
 
 	"github.com/IRSHIT033/E-comm-GO-/server/User_service/domain_user"
@@ -22,11 +22,15 @@ func NewOrderPlacer(p *kafka.Producer, topic string) *OrderPlacer {
 	}
 }
 
-func (op *OrderPlacer) placeOrder(user domain_user.User) error {
+func (op *OrderPlacer) placeOrder(cartpayload domain_user.KafkaMessagePayload) error {
 
-	payload := []byte(fmt.Sprintf("%v", user))
+	payload, err := json.Marshal(cartpayload)
 
-	err := op.producer.Produce(&kafka.Message{
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = op.producer.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{
 			Topic:     &op.topic,
 			Partition: kafka.PartitionAny},
@@ -42,11 +46,11 @@ func (op *OrderPlacer) placeOrder(user domain_user.User) error {
 
 }
 
-func ProduceCart(user domain_user.User) error {
+func ProduceCart(cartpayload domain_user.KafkaMessagePayload) error {
 
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
 		"bootstrap.servers": "localhost:9092",
-		"client.id":         "usergroup",
+		"client.id":         "unique",
 		"acks":              "all",
 	})
 
@@ -54,8 +58,8 @@ func ProduceCart(user domain_user.User) error {
 		return err
 	}
 
-	op := NewOrderPlacer(p, "product")
-	if err := op.placeOrder(user); err != nil {
+	op := NewOrderPlacer(p, "topic_0")
+	if err := op.placeOrder(cartpayload); err != nil {
 		return err
 	}
 
