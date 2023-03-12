@@ -19,6 +19,6 @@ func main() {
 	routeV1.Setup(db, timeout, productRoutes)
 
 	go grpc_config.GRPCListen(db)
-	gin.Run(":5001")
+	gin.Run(":3001")
 
 }

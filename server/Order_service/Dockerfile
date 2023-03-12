@@ -1,14 +1,11 @@
 FROM golang:alpine
 
-# Set necessary environmet variables needed for our image
-ENV GO111MODULE=on \
-    CGO_ENABLED=1 \
-    GOOS=linux \
-    GOARCH=amd64
 
-RUN apk add build-base
+
+RUN apk update && apk add gcc g++ libc-dev librdkafka-dev pkgconf
+
 # Move to working directory /build
-WORKDIR /server/User_service
+WORKDIR /server/Order_service
 
 # Copy and download dependency using go mod
 COPY go.mod .
@@ -19,10 +16,11 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN go build -o main ./cmd/
+RUN go build -tags musl -o main ./cmd/
+
 
 # Export necessary port
-EXPOSE 3000
+EXPOSE 3003
 
 # Command to run when starting the container
-CMD ["/server/User_service/main"]
+CMD ["/server/Order_service/main"]

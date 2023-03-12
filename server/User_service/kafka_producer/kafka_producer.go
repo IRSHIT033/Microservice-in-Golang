@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/IRSHIT033/E-comm-GO-/server/User_service/domain_user"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 )
 
 type OrderPlacer struct {
@@ -49,8 +49,8 @@ func (op *OrderPlacer) placeOrder(cartpayload domain_user.KafkaMessagePayload) e
 func ProduceCart(cartpayload domain_user.KafkaMessagePayload) error {
 
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092",
-		"client.id":         "unique",
+		"bootstrap.servers": "kafka:9092",
+		"client.id":         "unique123",
 		"acks":              "all",
 	})
 
@@ -58,7 +58,7 @@ func ProduceCart(cartpayload domain_user.KafkaMessagePayload) error {
 		return err
 	}
 
-	op := NewOrderPlacer(p, "topic_0")
+	op := NewOrderPlacer(p, "cart")
 	if err := op.placeOrder(cartpayload); err != nil {
 		return err
 	}

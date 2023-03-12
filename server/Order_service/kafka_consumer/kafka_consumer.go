@@ -6,16 +6,18 @@ import (
 	"log"
 
 	"github.com/IRSHIT033/E-comm-GO-/server/Order_service/domain_order"
+
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"gorm.io/gorm"
 )
 
 func ConsumeCart(db *gorm.DB) {
 
-	topic := "topic_0"
+	topic := "cart"
+
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092",
-		"group.id":          "foata",
+		"bootstrap.servers": "kafka:9092",
+		"group.id":          "cart_group",
 		"auto.offset.reset": "smallest",
 	})
 	if err != nil {

@@ -2,13 +2,12 @@ FROM golang:alpine
 
 # Set necessary environmet variables needed for our image
 ENV GO111MODULE=on \
-    CGO_ENABLED=1 \
+    CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64
 
-RUN apk add build-base
 # Move to working directory /build
-WORKDIR /server/User_service
+WORKDIR /server/Product_service
 
 # Copy and download dependency using go mod
 COPY go.mod .
@@ -22,7 +21,7 @@ COPY . .
 RUN go build -o main ./cmd/
 
 # Export necessary port
-EXPOSE 3000
+EXPOSE 3001
 
 # Command to run when starting the container
-CMD ["/server/User_service/main"]
+CMD ["/server/Product_service/main"]
