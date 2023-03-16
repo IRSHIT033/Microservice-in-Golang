@@ -18,5 +18,5 @@ func main() {
 
 	routeV1.Setup(db, timeout, routerV1)
 	go kafka_consumer.ConsumeCart(db)
-	gin.Run(":3003")
+	gin.Run(":3002")
 }

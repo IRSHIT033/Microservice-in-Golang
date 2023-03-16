@@ -1,7 +1,5 @@
 FROM golang:alpine
 
-
-
 RUN apk update && apk add gcc g++ libc-dev librdkafka-dev pkgconf
 
 # Move to working directory /build
@@ -20,7 +18,7 @@ RUN go build -tags musl -o main ./cmd/
 
 
 # Export necessary port
-EXPOSE 3003
+EXPOSE 3002
 
 # Command to run when starting the container
 CMD ["/server/Order_service/main"]
