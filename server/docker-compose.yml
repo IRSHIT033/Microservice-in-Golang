@@ -21,6 +21,18 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 
 
+  nginx-proxy:
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    depends_on:
+      - product_service
+      - order_service
+      - user_service
+    ports:
+      - "80:80"
+
+#####---------------------Order_Service--------------#########      
   order_service:
     build:
        context: ./Order_service
