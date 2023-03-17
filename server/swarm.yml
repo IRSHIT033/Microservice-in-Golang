@@ -16,6 +16,8 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
+    deploy:
+       mode: global  
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
@@ -25,7 +27,7 @@ services:
       image: irshit033/order:1.0.0
       depends_on:
       - "kafka"
-      port:
+      ports:
         - "3002:3002"
       deploy:
          mode: replicated
@@ -33,17 +35,17 @@ services:
   
   product-service:
       image: irshit033/product:1.0.0
-      port:
+      ports:
         - "3001:3001"
       deploy:
          mode: replicated
          replicas: 1
 
   user-service:
-      image: irshit033/user:1.0.0
+      image: irshit033/user:1.0.1
       depends_on:
       - "kafka"
-      port:
+      ports:
         - "3000:3000"
       deploy:
          mode: replicated
