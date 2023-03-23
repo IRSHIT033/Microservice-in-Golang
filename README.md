@@ -1,3 +1,2 @@
-# E-comm-GO-
-
-<img src="./Assets/microservice.png"/>
+# E-comm-GO
+![](./Assets/microservice.png)

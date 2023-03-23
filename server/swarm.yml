@@ -25,39 +25,35 @@ services:
 
   nginx-proxy:
     build:
-      dockerfile: Dockerfile
-      context: ./proxy
+      image: irshit033/proxy:latest
     depends_on:
       - product_service
       - order_service
       - user_service
     ports:
       - "80:80"
+    deploy:
+         mode: replicated
+         replicas: 1
 
   order-service:
-      image: irshit033/order:1.0.0
+      image: irshit033/order:latest
       depends_on:
       - "kafka"
-      ports:
-        - "3002:3002"
       deploy:
          mode: replicated
          replicas: 1
   
   product-service:
-      image: irshit033/product:1.0.0
-      ports:
-        - "3001:3001"
+      image: irshit033/product:latest
       deploy:
          mode: replicated
          replicas: 1
 
   user-service:
-      image: irshit033/user:1.0.1
+      image: irshit033/user:latest
       depends_on:
       - "kafka"
-      ports:
-        - "3000:3000"
       deploy:
          mode: replicated
          replicas: 1       
