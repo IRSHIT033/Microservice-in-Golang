@@ -2,7 +2,6 @@ package main
 
 import (
 	"time"
-	"fmt"
 
 	routeV1 "github.com/IRSHIT033/E-comm-GO-/server/Order_service/api/route/v1"
 	"github.com/IRSHIT033/E-comm-GO-/server/Order_service/bootstrap"
