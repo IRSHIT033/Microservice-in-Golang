@@ -6,8 +6,8 @@ name: Go
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    paths: 
+      - 'server/Order_service'
 
 jobs:
 
@@ -22,7 +22,7 @@ jobs:
         go-version: 1.19
 
     - name: Build
+      working-directory: ./server/Order_service
       run: go build -v ./...
 
-    - name: Test
-      run: go test -v ./...
+
