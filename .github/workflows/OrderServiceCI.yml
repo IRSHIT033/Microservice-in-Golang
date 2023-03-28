@@ -4,10 +4,12 @@
 name: Go
 
 on:
+
   push:
-    branches: [ "main" ]
-    paths: 
-      - 'server/Order_service/**'
+    branches:
+    - main
+    paths:
+    - server/Order_service/**
 
 jobs:
 
