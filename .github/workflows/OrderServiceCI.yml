@@ -7,7 +7,7 @@ on:
   push:
     branches: [ "main" ]
     paths: 
-      - 'server/Order_service'
+      - 'server/Order_service/**'
 
 jobs:
 
