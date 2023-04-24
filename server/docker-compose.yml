@@ -1,5 +1,7 @@
 version: '3.8'
 services:
+#####---------------------kafka_Service--------------######### 
+ 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -21,6 +23,8 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 
 
+#####---------------------Proxy_Service--------------######### 
+  
   nginx-proxy:
     build:
       dockerfile: Dockerfile
@@ -33,6 +37,7 @@ services:
       - "80:80"
 
 #####---------------------Order_Service--------------#########      
+  
   order_service:
     build:
        context: ./Order_service
@@ -45,7 +50,7 @@ services:
       mode: replicated
       replicas: 1 
                                                                                            
-
+#####---------------------Product_Service--------------######### 
   product_service:
      build:
        context: ./Product_service
@@ -58,6 +63,7 @@ services:
       mode: replicated
       replicas: 1   
 
+#####---------------------User_Service--------------######### 
   user_service:
      build:
        context: ./User_service
