@@ -14,7 +14,7 @@ func main() {
 	db := app.DB
 	gin := gin.Default()
 	routerV1 := gin.Group("order")
-	timeout := time.Duration(24) * time.Second
+	timeout := 5 * time.Second
 	routeV1.Setup(db, timeout, routerV1)
 	go kafka_consumer.ConsumeCart(db)
 	gin.Run(":3002")

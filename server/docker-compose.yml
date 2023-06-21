@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
 #####---------------------kafka_Service--------------######### 
  
@@ -28,30 +28,30 @@ services:
   nginx-proxy:
     build:
       dockerfile: Dockerfile
-      context: ./proxy
+      context: ./proxy_server_nginx
     depends_on:
-      - product_service
-      - order_service
-      - user_service
+      - product-service
+      - order-service
+      - user-service
     ports:
       - "80:80"
 
 #####---------------------Order_Service--------------#########      
   
-  order_service:
+  order-service:
     build:
        context: ./Order_service
     restart: always
     depends_on:
-      - broker
+      - "kafka"
     ports:
-       - "3003:3003"     
+       - "3002:3002"     
     deploy:
       mode: replicated
       replicas: 1 
                                                                                            
 #####---------------------Product_Service--------------######### 
-  product_service:
+  product-service:
      build:
        context: ./Product_service
      restart: always
@@ -64,7 +64,7 @@ services:
       replicas: 1   
 
 #####---------------------User_Service--------------######### 
-  user_service:
+  user-service:
      build:
        context: ./User_service
      restart: always
