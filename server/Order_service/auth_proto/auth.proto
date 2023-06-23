@@ -1,0 +1,15 @@
+syntax="proto3";
+
+package auth_proto;
+
+option go_package = "/auth_proto";
+
+import "google/protobuf/wrappers.proto";
+
+service AuthService {
+    rpc isTokenValid (TokenRequest) returns (google.protobuf.BoolValue) {}
+}
+
+message TokenRequest {
+    string token = 1;
+}

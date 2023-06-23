@@ -50,7 +50,7 @@ func (p *ProductServer) SendProduct(c context.Context, req *product_proto.Produc
 }
 
 func GRPCListen(db *gorm.DB) {
-	gRPCPort := 50001
+	gRPCPort := 9000
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", gRPCPort))
 	if err != nil {
 		log.Fatalf("Failed to listen for gRPC: %v", err)
