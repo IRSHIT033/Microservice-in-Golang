@@ -49,7 +49,7 @@ func (op *OrderPlacer) placeOrder(cartpayload domain_user.KafkaMessagePayload) e
 func ProduceCart(cartpayload domain_user.KafkaMessagePayload) error {
 
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "kafka:9092",
+		"bootstrap.servers": "localhost:9092",
 		"client.id":         "unique123",
 		"acks":              "all",
 	})

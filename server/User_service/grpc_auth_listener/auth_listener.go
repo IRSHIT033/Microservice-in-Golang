@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"strings"
 
 	"github.com/IRSHIT033/E-comm-GO-/server/User_service/auth_proto"
+	"github.com/IRSHIT033/E-comm-GO-/server/User_service/internal/tokenutil"
 	"google.golang.org/grpc"
 )
 
@@ -15,7 +18,24 @@ type AuthServer struct {
 }
 
 func (a *AuthServer) SendProduct(c context.Context, req *auth_proto.TokenRequest) (bool, error) {
+
+	t := strings.Split(req.Token, " ")
+	secret_key := os.Getenv("SECRET_KEY")
+	if len(t) == 2 {
+		authToken := t[1]
+		authorized, err := tokenutil.IsAuthorized(authToken, secret_key)
+		if authorized {
+			return true, nil
+		}
+
+		if err != nil {
+			log.Println(err)
+			return false, nil
+		}
+
+	}
 	return false, nil
+
 }
 
 func GRPCListen() {

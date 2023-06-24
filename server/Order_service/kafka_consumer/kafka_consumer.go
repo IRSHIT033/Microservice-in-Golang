@@ -16,7 +16,7 @@ func ConsumeCart(db *gorm.DB) {
 	topic := "cart"
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "kafka:9092",
+		"bootstrap.servers": "localhost:9092",
 		"group.id":          "cart_group",
 		"auto.offset.reset": "smallest",
 	})

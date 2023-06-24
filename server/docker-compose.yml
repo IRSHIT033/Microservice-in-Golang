@@ -20,59 +20,59 @@ services:
       - "9092:9092"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.19.129.200:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 
 
 #####---------------------Proxy_Service--------------######### 
   
-  nginx-proxy:
-    build:
-      dockerfile: Dockerfile
-      context: ./proxy_server_nginx
-    depends_on:
-      - product-service
-      - order-service
-      - user-service
-    ports:
-      - "80:80"
+#   nginx-proxy:
+#     build:
+#       dockerfile: Dockerfile
+#       context: ./proxy_server_nginx
+#     depends_on:
+#       - product-service
+#       - order-service
+#       - user-service
+#     ports:
+#       - "80:80"
 
-#####---------------------Order_Service--------------#########      
+# #####---------------------Order_Service--------------#########      
   
-  order-service:
-    build:
-       context: ./Order_service
-    restart: always
-    depends_on:
-      - "kafka"
-    ports:
-       - "3002:3002"     
-    deploy:
-      mode: replicated
-      replicas: 1 
+#   order-service:
+#     build:
+#        context: ./Order_service
+#     restart: always
+#     depends_on:
+#       - "kafka"
+#     ports:
+#        - "3002:3002"     
+#     deploy:
+#       mode: replicated
+#       replicas: 1 
                                                                                            
-#####---------------------Product_Service--------------######### 
-  product-service:
-     build:
-       context: ./Product_service
-     restart: always
-     depends_on:
-      - "kafka"
-     ports:
-       - "3001:3001"  
-     deploy:
-      mode: replicated
-      replicas: 1   
+# #####---------------------Product_Service--------------######### 
+#   product-service:
+#      build:
+#        context: ./Product_service
+#      restart: always
+#      depends_on:
+#       - "kafka"
+#      ports:
+#        - "3001:3001"  
+#      deploy:
+#       mode: replicated
+#       replicas: 1   
 
-#####---------------------User_Service--------------######### 
-  user-service:
-     build:
-       context: ./User_service
-     restart: always
-     depends_on:
-      - "kafka"
-     ports:
-       - "3000:3000"  
-     deploy:
-      mode: replicated
-      replicas: 1    
+# #####---------------------User_Service--------------######### 
+#   user-service:
+#      build:
+#        context: ./User_service
+#      restart: always
+#      depends_on:
+#       - "kafka"
+#      ports:
+#        - "3000:3000"  
+#      deploy:
+#       mode: replicated
+#       replicas: 1    
 
