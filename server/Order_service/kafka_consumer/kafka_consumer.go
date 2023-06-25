@@ -17,7 +17,7 @@ func ConsumeCart(db *gorm.DB) {
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": "localhost:9092",
-		"group.id":          "cart_group",
+		"group.id":          "cart",
 		"auto.offset.reset": "smallest",
 	})
 	if err != nil {
@@ -35,6 +35,7 @@ func ConsumeCart(db *gorm.DB) {
 			//decode the byte message received from kafka into desired model
 			var data domain_order.KafkaMessagePayload
 			err := json.Unmarshal(e.Value, &data)
+			println("\\\\\\", data.Operation)
 			if err != nil {
 				log.Fatal(err)
 			}

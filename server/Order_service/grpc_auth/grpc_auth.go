@@ -10,7 +10,7 @@ import (
 )
 
 func CheckTokenValidityViaGRPC(token string) bool {
-	conn, err := grpc.Dial("localhost:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	conn, err := grpc.Dial("localhost:9002", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 		return false
@@ -20,6 +20,7 @@ func CheckTokenValidityViaGRPC(token string) bool {
 	client := auth_proto.NewAuthServiceClient(conn)
 
 	response, err := client.IsTokenValid(context.Background(), &auth_proto.TokenRequest{Token: token})
+
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 		return false

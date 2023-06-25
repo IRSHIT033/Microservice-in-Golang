@@ -50,7 +50,7 @@ func ProduceCart(cartpayload domain_user.KafkaMessagePayload) error {
 
 	p, err := kafka.NewProducer(&kafka.ConfigMap{
 		"bootstrap.servers": "localhost:9092",
-		"client.id":         "unique123",
+		"client.id":         "unique6",
 		"acks":              "all",
 	})
 

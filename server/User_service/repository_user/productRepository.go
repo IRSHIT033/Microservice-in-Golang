@@ -87,6 +87,7 @@ func (pr *productRepository) Remove(c context.Context, productID uint, userID ui
 	cart.CustomerId = userID
 	cart.Product = product
 	cart.Operation = "Remove"
+	println(cart.CustomerId)
 	go kafka_producer.ProduceCart(cart)
 	////////////////////////////////////////////////////////////
 

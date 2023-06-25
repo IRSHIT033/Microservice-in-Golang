@@ -14,7 +14,7 @@ import (
 
 func GetProductViaGRPC(productId uint) domain_user.Product {
 
-	conn, err := grpc.Dial("localhost:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	conn, err := grpc.Dial("localhost:9000", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 		return domain_user.Product{}
